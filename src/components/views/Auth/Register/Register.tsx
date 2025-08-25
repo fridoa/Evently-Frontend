@@ -3,20 +3,15 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { UseRegister } from "./UseRegister";
 import { Controller } from "react-hook-form";
 import { cn } from "@/utils/cn";
+import { usePasswordVisible } from "@/hooks/usePasswordVisible";
+import { useRegister } from "@/hooks/useRegister";
 
 const Register = () => {
-  const {
-    visiblePassword,
-    handleVisiblePassword,
-    control,
-    handleSubmit,
-    handleRegister,
-    errors,
-    isPendingRegister,
-  } = UseRegister();
+  const { visiblePassword, handleVisiblePassword } = usePasswordVisible();
+  const { control, handleSubmit, handleRegister, errors, isPendingRegister } =
+    useRegister();
   return (
     <div className="flex w-full flex-col items-center justify-center gap-10 lg:flex-row lg:gap-20">
       <div className="flex w-full flex-col items-center justify-center gap-10 lg:w-1/3">

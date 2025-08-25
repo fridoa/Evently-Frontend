@@ -4,7 +4,7 @@ import React from "react";
 
 const RegisterPage = () => {
   return (
-    <AuthLayout title="Acara | Register">
+    <AuthLayout title="Register">
       <Register />
     </AuthLayout>
   );
