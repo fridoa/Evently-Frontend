@@ -3,11 +3,11 @@ import React from "react";
 import { ReactNode } from "react";
 
 interface AuthLayoutProps {
-  title?: string;
   children: ReactNode;
+  title?: string;
 }
 const AuthLayout = (props: AuthLayoutProps) => {
-  const { title, children } = props;
+  const { children, title } = props;
   return (
     <>
       <PageHead title={title} />

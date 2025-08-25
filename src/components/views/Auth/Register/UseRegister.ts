@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import authServices from "@/services/endpoint.constant";
 import { IRegister } from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import authServices from "@/services/auth.service";
 
 const registerSchema = yup.object().shape({
   fullName: yup.string().required("Fullname wajib diisi"),
@@ -53,8 +53,7 @@ export const UseRegister = () => {
   });
 
   const registerService = async (payload: IRegister) => {
-    const result = await authServices.register(payload);
-    return result;
+    return await authServices.register(payload);
   };
 
   const { mutate: mutateRegister, isPending: isPendingRegister } = useMutation({

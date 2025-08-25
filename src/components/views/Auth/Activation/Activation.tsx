@@ -3,8 +3,13 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 
-const RegisterSuccess = () => {
+interface ActivationProps {
+  status: "success" | "failed";
+}
+
+const Activation = (props: ActivationProps) => {
   const router = useRouter();
+  const { status } = props;
   return (
     <div className="flex w-screen flex-col items-center justify-center gap-10">
       <div className="flex flex-col items-center justify-center gap-10">
@@ -15,7 +20,11 @@ const RegisterSuccess = () => {
           height={180}
         />
         <Image
-          src="/images/illustrations/success.svg"
+          src={
+            status === "success"
+              ? "/images/illustrations/success.svg"
+              : "/images/illustrations/pending.svg"
+          }
           alt="logo"
           width={300}
           height={300}
@@ -23,10 +32,12 @@ const RegisterSuccess = () => {
       </div>
       <div className="flex flex-col items-center justify-center gap-2 text-center">
         <h1 className="text-danger-500 text-3xl font-bold">
-          Create Account Success
+          {status === "success" ? "Activation Success" : "Activation Failed"}
         </h1>
         <p className="text-default-500 text-xl font-bold">
-          Check your email for account activation
+          {status === "success"
+            ? "Thank you for register account in Evently"
+            : "Confirmation code is invalid"}
         </p>
         <Button
           className="mt-4 w-fit"
@@ -41,4 +52,4 @@ const RegisterSuccess = () => {
   );
 };
 
-export default RegisterSuccess;
+export default Activation;
