@@ -168,7 +168,7 @@ const Register = () => {
                 href="/auth/login"
                 className="text-danger-400 font-semibold"
               >
-                Login
+                Login here
               </Link>
             </p>
           </form>
