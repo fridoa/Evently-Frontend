@@ -53,6 +53,12 @@ const SIDEBAR_MEMBER = [
     href: "/member/transactions",
     icon: <CiWallet />,
   },
+  {
+    key: "settings",
+    label: "Settings",
+    href: "/member/settings",
+    icon: <CiSettings />,
+  },
 ];
 
 export { SIDEBAR_ADMIN, SIDEBAR_MEMBER };
