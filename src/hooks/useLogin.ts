@@ -14,7 +14,7 @@ const loginSchema = yup.object().shape({
 
 export const useLogin = () => {
   const router = useRouter();
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const toogleVisibility = () => setIsVisible(!isVisible);
 
   const callbackUrl: string = (router.query.callbackUrl as string) || "/";

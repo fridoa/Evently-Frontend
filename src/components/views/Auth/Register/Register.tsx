@@ -111,7 +111,7 @@ const Register = () => {
                   errorMessage={errors.password?.message}
                   endContent={
                     <button
-                      className="focus:outline-none"
+                      className="flex h-full items-center justify-center focus:outline-none"
                       type="button"
                       onClick={() => handleVisiblePassword("password")}
                     >
@@ -140,7 +140,7 @@ const Register = () => {
                   errorMessage={errors.confirmPassword?.message}
                   endContent={
                     <button
-                      className="flex items-center justify-center focus:outline-none"
+                      className="flex h-full items-center justify-center focus:outline-none"
                       type="button"
                       onClick={() => handleVisiblePassword("confirmPassword")}
                     >

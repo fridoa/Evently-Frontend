@@ -82,7 +82,7 @@ const Login = () => {
                   errorMessage={errors.password?.message}
                   endContent={
                     <button
-                      className="focus:outline-none"
+                      className="flex h-full items-center justify-center focus:outline-none"
                       type="button"
                       onClick={toogleVisibility}
                     >
