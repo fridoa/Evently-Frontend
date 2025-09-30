@@ -40,7 +40,7 @@ const Register = () => {
               {errors?.root?.message}
             </p>
           )}
-
+          
           <form
             action=""
             className={cn(
