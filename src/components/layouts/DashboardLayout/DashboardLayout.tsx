@@ -17,7 +17,7 @@ const DashboardLayout = (props: PropTypes) => {
   return (
     <>
       <PageHead title={title} />
-      <div className="max-w-scren-3xl 3xl:container flex">
+      <div className="max-w-screen-3xl 3xl:container flex">
         <DashboardLayoutSidebar
           sidebarItems={type === "admin" ? SIDEBAR_ADMIN : SIDEBAR_MEMBER}
           isOpen={open}
@@ -36,7 +36,7 @@ const DashboardLayout = (props: PropTypes) => {
               onClick={() => setOpen(!open)}
             />
           </Navbar>
-          <p className="text-smmall mb-4">{description}</p>
+          <p className="text-small mb-4">{description}</p>
           {children}
         </div>
       </div>
