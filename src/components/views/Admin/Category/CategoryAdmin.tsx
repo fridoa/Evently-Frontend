@@ -12,6 +12,7 @@ import React, { Key, ReactNode, useCallback, useEffect } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { COLUMN_LISTS_CATEGORY } from "./Category.constants";
 import useCategory from "@/hooks/useCategory";
+import InputFile from "@/components/ui/InputFile";
 
 const CategoryAdmin = () => {
   const { push, isReady, query } = useRouter();
@@ -99,6 +100,7 @@ const CategoryAdmin = () => {
           totalPages={dataCategory?.pagination.totalPages}
         />
       )}
+      <InputFile name="" isDropable />
     </section>
   );
 };
