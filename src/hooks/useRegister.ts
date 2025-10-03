@@ -5,6 +5,7 @@ import { IRegister } from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import authServices from "@/services/auth.service";
+import { toast } from "react-toastify";
 
 const registerSchema = yup.object().shape({
   fullName: yup.string().required("Fullname wajib diisi"),
@@ -52,6 +53,7 @@ export const useRegister = () => {
       });
     },
     onSuccess: () => {
+      toast.success("Register successfully");
       router.push("/auth/register/success");
       reset();
     },
