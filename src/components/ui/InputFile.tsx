@@ -1,17 +1,36 @@
 import { cn } from "@/utils/cn";
+import { Button, Spinner } from "@heroui/react";
 import Image from "next/image";
 import React, { ChangeEvent, useEffect, useId, useRef, useState } from "react";
-import { CiSaveUp2 } from "react-icons/ci";
+import { CiSaveUp2, CiTrash } from "react-icons/ci";
 
 interface PropTypes {
   name: string;
   isDropable?: boolean;
   className?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onDelete?: () => void;
+  onUpload?: (file: FileList) => void;
+  isDeleting?: boolean;
+  isUploading?: boolean;
+  isInvalid?: boolean;
+  errorMessage?: string;
+  preview?: string;
 }
 
 const InputFile = (props: PropTypes) => {
-  const [uploadImage, setUploadImage] = useState<File | null>(null);
-  const { name, className, isDropable = false } = props;
+  const {
+    name,
+    className,
+    isDropable = false,
+    isInvalid,
+    errorMessage,
+    onDelete,
+    onUpload,
+    isDeleting,
+    isUploading,
+    preview,
+  } = props;
   const drop = useRef<HTMLLabelElement>(null);
   const dropzoneId = useId();
 
@@ -24,7 +43,10 @@ const InputFile = (props: PropTypes) => {
 
   const handleDrop = (e: DragEvent) => {
     e.preventDefault();
-    setUploadImage(e.dataTransfer?.files?.[0] || null);
+    const files = e.dataTransfer?.files;
+    if (files && onUpload) {
+      onUpload(files);
+    }
   };
 
   useEffect(() => {
@@ -39,56 +61,79 @@ const InputFile = (props: PropTypes) => {
     }
   }, []);
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.currentTarget.files;
-    if (files) {
-      setUploadImage(files[0]);
+  const handleOnUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.currentTarget;
+    if (files && onUpload) {
+      onUpload(files);
     }
   };
   return (
-    <label
-      ref={drop}
-      htmlFor={`dropzone-file-${dropzoneId}`}
-      className={cn(
-        "border-default-300 bg-default-50 hover:bg-default-100 flex min-h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed",
-        className,
-      )}
-    >
-      {/* render image preview */}
-      {uploadImage ? (
-        <div className="flex flex-col items-center justify-center p-5">
-          <div className="mb-2 w-1/2">
-            <Image
-              fill
-              src={URL.createObjectURL(uploadImage)}
-              alt="image"
-              className="!relative"
-            />
+    <div>
+      <label
+        ref={drop}
+        htmlFor={`dropzone-file-${dropzoneId}`}
+        className={cn(
+          "border-default-300 bg-default-50 hover:bg-default-100 flex min-h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed",
+          className,
+          { "border-danger-500": isInvalid },
+        )}
+      >
+        {/* render image preview */}
+        {preview && (
+          <div className="relative flex flex-col items-center justify-center p-5">
+            <div className="mb-2 w-1/2">
+              <Image fill src={preview} alt="image" className="!relative" />
+            </div>
+            <Button
+              disabled={isDeleting}
+              isIconOnly
+              onPress={onDelete}
+              className="bg-danger-100 absolute top-2 right-2 flex h-9 w-9 items-center justify-center rounded"
+            >
+              {isDeleting ? (
+                <Spinner size="sm" color="danger" />
+              ) : (
+                <CiTrash className="text-danger-500 h-5 w-5" />
+              )}
+            </Button>
+          </div>
+        )}
+
+        {!preview && !isUploading && (
+          <div className="flex flex-col items-center justify-center p-5">
+            <CiSaveUp2 className="mb-2 h-10 w-10 text-gray-400" />
             <p className="text-center text-sm font-semibold text-gray-500">
-              {uploadImage.name}
+              {isDropable
+                ? "Click or drag and drop to upload an image"
+                : "Click to upload an image"}
             </p>
           </div>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center p-5">
-          <CiSaveUp2 className="mb-2 h-10 w-10 text-gray-400" />
-          <p className="text-center text-sm font-semibold text-gray-500">
-            {isDropable
-              ? "Click or drag and drop to upload an image"
-              : "Click to upload an image"}
-          </p>
-        </div>
-      )}
+        )}
 
-      <input
-        name={name}
-        type="file"
-        className="hidden"
-        accept="image/*"
-        id={`dropzone-file-${dropzoneId}`}
-        onChange={handleOnChange}
-      />
-    </label>
+        {isUploading && (
+          <div className="flex flex-col items-center justify-center p-5">
+            <Spinner color="danger" />
+          </div>
+        )}
+
+        <input
+          name={name}
+          type="file"
+          className="hidden"
+          accept="image/*"
+          id={`dropzone-file-${dropzoneId}`}
+          onChange={handleOnUpload}
+          disabled={preview !== ""}
+          onClick={(e) => {
+            e.currentTarget.value = "";
+            e.target.dispatchEvent(new Event("change", { bubbles: true }));
+          }}
+        />
+      </label>
+      {isInvalid && (
+        <p className="text-danger-500 mt-1 text-sm">{errorMessage}</p>
+      )}
+    </div>
   );
 };
 

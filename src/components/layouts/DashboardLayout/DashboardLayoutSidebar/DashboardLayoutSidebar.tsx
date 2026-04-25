@@ -44,7 +44,7 @@ const DashboardLayoutSidebar = (props: PropTypes) => {
           items={sidebarItems}
           variant="solid"
           aria-label="Dashboard-Menu"
-        >
+        > 
           {(item) => (
             <ListboxItem
               key={item.key}
