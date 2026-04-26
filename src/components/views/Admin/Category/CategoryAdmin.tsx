@@ -5,30 +5,56 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { Key, ReactNode, useCallback } from "react";
+import React, { Key, ReactNode, useCallback, useEffect } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { COLUMN_LISTS_CATEGORY } from "./Category.constants";
-import { LIMIT_LISTS } from "@/constants/list.constant";
+import useCategory from "@/hooks/useCategory";
+import InputFile from "@/components/ui/InputFile";
+import AddCategory from "./AddCategory/AddCategory";
 
 const CategoryAdmin = () => {
-  const { push } = useRouter();
+  const { push, isReady, query } = useRouter();
+  const {
+    setURL,
+    currentPage,
+    currentLimit,
+    dataCategory,
+    handleChangeLimit,
+    handleChangePage,
+    handleClearSearch,
+    handleSearch,
+    isLoadingCategory,
+    isRefetchingCategory,
+    refetchCategory,
+  } = useCategory();
+  console.log(dataCategory);
+
+  useEffect(() => {
+    if (isReady) {
+      setURL();
+    }
+  }, [isReady]);
+
+  const addCategoryModal = useDisclosure();
+
   const renderCell = useCallback(
     (category: Record<string, unknown>, columnKey: Key) => {
       const cellValue = category[columnKey as keyof typeof category];
 
       switch (columnKey) {
-        case "icon":
-          return (
-            <Image
-              src={`${cellValue}`}
-              alt="Category Icon"
-              width={100}
-              height={200}
-            />
-          );
+        // case "icon":
+        //   return (
+        //     <Image
+        //       src={`${cellValue}`}
+        //       alt="Category Icon"
+        //       width={100}
+        //       height={200}
+        //     />
+        //   );
         case "actions":
           return (
             <Dropdown>
@@ -61,28 +87,25 @@ const CategoryAdmin = () => {
   );
   return (
     <section>
-      <DataTable
-        buttonTopContentLabel="Add Category"
-        currentPage={1}
-        columns={COLUMN_LISTS_CATEGORY}
-        data={[
-          {
-            _id: "123",
-            name: "Music",
-            description: "Category for music events",
-            icon: "/images/general/logo.png",
-          },
-        ]}
-        emptyContent="No category found."
-        limit={LIMIT_LISTS[0].label}
-        onChangeLimit={() => {}}
-        onChangePage={() => {}}
-        onChangeSearch={() => {}}
-        onClearSearch={() => {}}
-        onClickButtonTopContent={() => {}}
-        renderCell={renderCell}
-        totalPages={2}
-      />
+      {Object.keys(query).length > 0 && (
+        <DataTable
+          buttonTopContentLabel="Add Category"
+          currentPage={Number(currentPage)}
+          columns={COLUMN_LISTS_CATEGORY}
+          data={dataCategory?.data || []}
+          emptyContent="No category found."
+          isLoading={isLoadingCategory || isRefetchingCategory}
+          limit={String(currentLimit)}
+          onChangeLimit={handleChangeLimit}
+          onChangePage={handleChangePage}
+          onChangeSearch={handleSearch}
+          onClearSearch={handleClearSearch}
+          onClickButtonTopContent={addCategoryModal.onOpen}
+          renderCell={renderCell}
+          totalPages={dataCategory?.pagination.totalPages}
+        />
+      )}
+      <AddCategory  {...addCategoryModal} refetchCategory={refetchCategory} />
     </section>
   );
 };

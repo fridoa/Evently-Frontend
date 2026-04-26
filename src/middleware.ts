@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
     if (token?.user?.role !== "admin") {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/member/dashboard", request.url));
     }
     if (pathname === "/admin") {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
@@ -36,6 +36,9 @@ export async function middleware(request: NextRequest) {
       const url = new URL("/auth/login", request.url);
       url.searchParams.set("callbackUrl", encodeURI(request.url));
       return NextResponse.redirect(url);
+    }
+    if (token?.user?.role !== "member") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
 
     if (pathname === "/member") {

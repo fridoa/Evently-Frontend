@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const loginSchema = yup.object().shape({
   identifier: yup.string().required("Email atau username wajib diisi"),
@@ -48,6 +49,7 @@ export const useLogin = () => {
       });
     },
     onSuccess: () => {
+      toast.success("Login successfully");
       router.push(callbackUrl);
       reset();
     },
